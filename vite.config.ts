@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { devtools } from '@tanstack/devtools-vite'
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,6 +13,9 @@ export default defineConfig({
     //   target: 'react',
     //   autoCodeSplitting: true,
     // }),
+    codeInspectorPlugin({
+      bundler: 'vite',
+    }),
     devtools(),
     react({
       babel: {
