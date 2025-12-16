@@ -1,0 +1,61 @@
+<div id="status"></div>
+
+<script>
+  const login = async () => {
+    const reuslt = await fetch('/api/auth', {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: '1',
+        password: '2',
+      }),
+    })
+  }
+
+  const logout = async () => {
+    const reuslt = await fetch('/api/auth', {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+  }
+
+  const check = async () => {
+    const reuslt = await fetch('/api/auth', {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+    const data = await reuslt.json()
+
+    const el = document.getElementById('status')
+    el.innerText = JSON.stringify(data, null, 2)
+
+    console.log(reuslt)
+  }
+
+  const renew = async () => {
+    const reuslt = await fetch('/api/auth', {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+  }
+
+  setInterval(() => {
+    check()
+  }, 1e3)
+</script>
+
+<button onclick="login()">login</button>
+
+<button onclick="logout()">logout</button>
+
+<button onclick="check()">check</button>
+
+<button onclick="renew()">renew</button>
