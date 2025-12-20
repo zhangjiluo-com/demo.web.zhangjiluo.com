@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Lit + TS</title>
+    <script type="module" src="/source/index.ts"></script>
+  </head>
+  <body>
+    <form
+      onsubmit="event.preventDefault(); alert(3);console.log(event)"
+      onreset="console.log(event)"
+    >
+      <x-input type="text"></x-input>
+
+      <x-button type="primary" danger>Search</x-button>
+      <x-button danger>按 1 钮</x-button>
+      <x-button type="text">text按钮</x-button>
+    </form>
+  </body>
+</html>
