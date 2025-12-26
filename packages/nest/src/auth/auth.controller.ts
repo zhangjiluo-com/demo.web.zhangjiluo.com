@@ -5,60 +5,34 @@ import {
   Headers,
   HttpException,
   HttpStatus,
+  Request,
+  Get,
+  UseGuards,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
+import { ApiHeader, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { LoginDto } from "./dto/login.dto";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Public } from "src/shared/decorators/public.decorator";
 
-@ApiTags("用户模块")
+@ApiTags("用户")
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiOperation({ summary: "登录" })
+  @Public()
+  @ApiOperation({
+    summary: "登录",
+    description: "支持手机号、邮箱、用户名密码登录",
+  })
   @Post("login")
-  async login(@Body() loginDto: LoginDto) {
-    try {
-      return await this.authService.login(loginDto);
-    } catch (error) {
-      throw new HttpException(
-        { message: error.message },
-        HttpStatus.UNAUTHORIZED
-      );
-    }
+  async login(@Body() dto: LoginDto) {
+    return this.authService.login(dto.username, dto.password);
   }
 
-  @Post("logout")
-  async logout(@Headers("authorization") token: string) {
-    try {
-      if (!token) {
-        throw new Error("缺少认证令牌");
-      }
-      // 移除 Bearer 前缀
-      const actualToken = token.startsWith("Bearer ") ? token.slice(7) : token;
-      return await this.authService.logout(actualToken);
-    } catch (error) {
-      throw new HttpException(
-        { message: error.message },
-        HttpStatus.BAD_REQUEST
-      );
-    }
-  }
-
-  @Post("validate")
-  async validateToken(@Headers("authorization") token: string) {
-    try {
-      if (!token) {
-        throw new Error("缺少认证令牌");
-      }
-      // 移除 Bearer 前缀
-      const actualToken = token.startsWith("Bearer ") ? token.slice(7) : token;
-      return await this.authService.validateToken(actualToken);
-    } catch (error) {
-      throw new HttpException(
-        { message: error.message },
-        HttpStatus.UNAUTHORIZED
-      );
-    }
+  @Get("check")
+  async check(@Request() req) {
+    return {
+      isValid: !!req.user,
+    };
   }
 }
